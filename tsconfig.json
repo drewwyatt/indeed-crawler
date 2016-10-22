@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "removeComments": true,
+        "sourceMap": true,
+        "noImplicitAny": true,
+        "moduleResolution": "node"
+    },
+    "exclude": [
+        "node_modules",
+        "typings",
+		"./src/**/*.js",
+		"./src/**/*.map"
+    ],
+    "filesGlob": [
+		"./src/**/*.ts"
+    ],
+    "compileOnSave": true,
+    "buildOnSave": false
+}
