@@ -12,6 +12,7 @@
   "dependencies": {
     "@types/node": "^6.0.45",
     "@types/request": "0.0.32",
+    "json2csv": "^3.7.0",
     "request": "^2.75.0",
     "typescript": "^2.0.3"
   }
