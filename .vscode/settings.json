@@ -4,7 +4,8 @@
 		"**/.git": true,
 		"**/.svn": true,
 		"**/.DS_Store": true,
-		"**/*.map": true
+		"**/*.map": true,
+		"src/**/*.js": true
 	},
 	"typescript.tsdk": "node_modules/typescript/lib"
 }
