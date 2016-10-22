@@ -17,10 +17,9 @@ async function getResults(): Promise<Search.IResponse[]> {
 }
 
 async function main() {
+	console.log('Starting search...');
 	const results = await getResults();
 	logResults(results);
 }
 
-
-console.log('Starting search...');
 main();
