@@ -20,6 +20,9 @@ async function main() {
 	console.log('Starting search...');
 	const results = await getResults();
 	logResults(results);
+	// results.map(r => console.log(r.query, getCompanies(r)));
+	const deserializedResults = results.map(r => new Search.Response(r));
+	deserializedResults.forEach(d => console.log(d.companies));
 }
 
 main();
