@@ -2,8 +2,8 @@ import * as request from 'request';
 import { Search } from '../models';
 
 const API_BASE = 'http://api.indeed.com/ads/apisearch';
-const PAGING_CAP = 10; // arbitrary cap to speed things up
-// const PAGING_CAP = 40; // arbitrary cap based on observed responses
+// const PAGING_CAP = 10; // arbitrary cap to speed things up during testing
+const PAGING_CAP = 100;
 
 const EMPTY_RESPONSE: Search.IResponse = {
     version: 2,
@@ -30,7 +30,8 @@ export class API {
             return { 
             method: 'GET',
             url: 'http://api.indeed.com/ads/apisearch',
-            qs: { publisher: '4757914134515649',
+            qs: { 
+                publisher: '4757914134515649',
                 format: 'json',
                 v: '2',
                 limit: '1000',
@@ -53,6 +54,11 @@ export class API {
     private static async _getPaginatedResults(query: string, start: number = 1, prevResponse: Search.IResponse = EMPTY_RESPONSE): Promise<Search.IResponse> {
         console.log('Performing search for...', query, 'page:', prevResponse.pageNumber);
         const response = await API._makeRequest(API._buildRequest(query, start));
+        
+        if (prevResponse.end === response.end) {
+            return prevResponse;
+        }
+        
         const combinedResponse = Object.assign({}, prevResponse, response, {
             start: prevResponse.start,
             end: response.end,
@@ -61,7 +67,7 @@ export class API {
                 ...response.results
             ]
         })
-        if (response.pageNumber <= PAGING_CAP && response.end < response.totalResults) {
+        if ( response.pageNumber <= PAGING_CAP && response.end < response.totalResults) {
             return await API._getPaginatedResults(query, response.end, combinedResponse);
         }
 
