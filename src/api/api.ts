@@ -5,10 +5,24 @@ const API_BASE = 'http://api.indeed.com/ads/apisearch';
 const PAGING_CAP = 10; // arbitrary cap to speed things up
 // const PAGING_CAP = 40; // arbitrary cap based on observed responses
 
+const EMPTY_RESPONSE: Search.IResponse = {
+    version: 2,
+    query: '',
+    location: '',
+    dupeFilter: true,
+    paginationPayload: '',
+    highlight: false,
+    totalResults: 0,
+    start: 1,
+    end: 1,
+    pageNumber: 1,
+    results: []
+};
+
 export class API {
 
     static async makeRequestsWithQueries(queries: string[]): Promise<Search.IResponse[]> {
-        const requests = queries.map(q => API._makeRequest(API._buildRequest(q)));
+        const requests = queries.map(q => API._getPaginatedResults(q));
         return Promise.all(requests)
     }
 
@@ -36,4 +50,21 @@ export class API {
         });
     }
 
+    private static async _getPaginatedResults(query: string, start: number = 1, prevResponse: Search.IResponse = EMPTY_RESPONSE): Promise<Search.IResponse> {
+        console.log('Performing search for...', query, 'page:', prevResponse.pageNumber);
+        const response = await API._makeRequest(API._buildRequest(query, start));
+        const combinedResponse = Object.assign({}, prevResponse, response, {
+            start: prevResponse.start,
+            end: response.end,
+            results: [
+                ...prevResponse.results,
+                ...response.results
+            ]
+        })
+        if (response.pageNumber <= PAGING_CAP && response.end < response.totalResults) {
+            return await API._getPaginatedResults(query, response.end, combinedResponse);
+        }
+
+        return combinedResponse;
+    } 
 }
