@@ -1,4 +1,5 @@
 import { ISearchResult } from './search-result';
+import { Utils } from '../../utils';
 
 export interface ISearchResponse {
 	version: number;
@@ -28,7 +29,7 @@ export class SearchResponse implements ISearchResponse {
 	results: ISearchResult[] = [];
 
 	constructor(response: ISearchResponse) {
-		Object.keys(response).reduce(createDeserialzer(this, response));
+		Object.keys(response).reduce(Utils.createObjectDeserialzer(this, response));
 	}
 
 	get companies(): string[] {
@@ -37,12 +38,5 @@ export class SearchResponse implements ISearchResponse {
 
 	private _companyReducer(prev: string[], curr: ISearchResult): string[]{
 		return prev.indexOf(curr.company) > -1 ? prev : [ ...prev,  curr.company ];
-	}
-}
-
-function createDeserialzer<A extends Object, B extends Object>(deserialized: A, obj: B): (prev: string, curr: string) => string {
-	return function (prev: string, curr: string): string {
-		if (deserialized.hasOwnProperty(curr)) (deserialized as any)[curr] = (obj as any)[curr];
-		return curr;
 	}
 }
