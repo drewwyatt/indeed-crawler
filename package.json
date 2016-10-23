@@ -7,8 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "tsc && node -r dotenv/config src/index.js"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Drew Wyatt <drew.j.wyatt@gmail.com>",
+  "license": "MIT",
   "dependencies": {
     "@types/node": "^6.0.45",
     "@types/request": "0.0.32",
