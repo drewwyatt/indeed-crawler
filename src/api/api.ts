@@ -2,8 +2,7 @@ import * as request from 'request';
 import { Search } from '../models';
 
 const API_BASE = 'http://api.indeed.com/ads/apisearch';
-// const PAGING_CAP = 10; // arbitrary cap to speed things up during testing
-const PAGING_CAP = 100;
+const PAGING_CAP = process.env.PAGING_CAP;
 
 const EMPTY_RESPONSE: Search.IResponse = {
     version: 2,
@@ -31,7 +30,7 @@ export class API {
             method: 'GET',
             url: 'http://api.indeed.com/ads/apisearch',
             qs: { 
-                publisher: '4757914134515649',
+                publisher: process.env.PUBLISHER_ID,
                 format: 'json',
                 v: '2',
                 limit: '1000',

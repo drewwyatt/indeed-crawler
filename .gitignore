@@ -4,3 +4,4 @@ src/**/*.map
 typings
 queries.txt
 *.csv
+.env

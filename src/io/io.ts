@@ -4,12 +4,12 @@ const json2csv: Function = require('json2csv');
 export class IO {
     static GetQueries(): Promise<string[]> {
         return new Promise((resolve, reject) => {
-            fs.readFile('./queries.txt', 'utf8', function(err: any, something: any) {
-                if (err) {
-                    reject('Could not read file');
+            fs.readFile('./queries.txt', 'utf8', function(err: any, queryLines: any) {
+                if (err || typeof queryLines === 'undefined') {
+                    throw new Error('Could not read queries from file. Please make sure "queries.txt" exists in the root of this application.');
                 }
 
-                resolve(something.split('\n'));
+                resolve(queryLines.split('\n'));
             })
         });
     }
