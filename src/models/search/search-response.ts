@@ -32,11 +32,23 @@ export class SearchResponse implements ISearchResponse {
 		Object.keys(response).reduce(Utils.createObjectDeserialzer(this, response));
 	}
 
-	get companies(): string[] {
+	get companies(): string {
+		return this._companies.join(',');
+	}
+
+	private get _companies(): string[] {
 		return this.results.reduce(this._companyReducer, []);
 	}
 
 	private _companyReducer(prev: string[], curr: ISearchResult): string[]{
 		return prev.indexOf(curr.company) > -1 ? prev : [ ...prev,  curr.company ];
+	}
+
+	get scannedResults(): number {
+		return this.results.length;
+	}
+
+	get numberOfCompanies(): number {
+		return this._companies.length;
 	}
 }
